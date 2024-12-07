@@ -1,0 +1,49 @@
+회의록: 중고차 데이터 처리 및 정제 기준
+회의 날짜 : 2024년 12월 7일 
+회의 참여: 박재욱 , 강건희
+
+회의 내용
+
+1 - 컬럼 삭제
+Id: 드랍
+License: 드랍
+License_changed: 드랍
+Theft (도난사고): 드랍
+Warranty: 드랍
+
+2 - 컬럼 변환 및 생성
+
+registration_date → car_age: 오늘 날짜를 기준으로 계산. car_age는 지수함수를 사용해 변환.
+total_loss (전손사고): 값이 0이면 유지. 0이 아니면 1로 변환.
+Flood (침수사고):값이 0이면 유지. 0이 아니면 1로 변환.
+damaged와 damaged_by_other: 두 컬럼을 합쳐 하나의 컬럼으로 변환.
+Transmission (변속기): 수동이 아닌 경우 모두 자동으로 변환 (자동 변속기로 통일).
+Mileage (주행 거리): 콤마(,)와 단위(km) 제거. 숫자 데이터로 변환.
+tuning_history, special_history, usage_change, Accident, little_accident: 없으면 0, 있으면 1로 변환.
+Price: 예약중인 차량은 가격을 9,999만 원으로 설정.
+9,990만 원을 초과하는 가격은 이상치로 간주하고 제거.
+
+registration_date -> 오늘 날짜를 기준으로 계산해서 car_age로 변환 지수함수 이용하자
+license_changed -> 드랍
+owner_changed -> 일단 보류
+total_loss 전손사고 -> 0이면 그대로 두고 나머지는 1로 바꾼다
+Flood 침수 -> 0이면 그대로 두고 나머지는 1로 바꾼다
+Theft 도난사고 -> 드랍.;;;;
+damaged와 damaged_by_other 합친다
+Transmission -> 수동이 아니면 모두 오토
+Warranty -> 드랍
+Mileage -> 콤마랑 km 지우고 숫자만 남기자
+tuning_history -> 없으면 0 있으면 1
+special_history -> 없으면 0 있으면 1
+usage_change -> 없으면 0 있으면 1
+Accident -> 없으면 0 있으면 1
+little_accident -> 없으면 0 있으면 1
+Price -> 예약중인것은 9999만원 9990만원 가격범위를 벗어나는 항목 제거하자
+
+3. 추가 논의 필요
+owner_changed 처리 방안:
+차량 소유 변경 횟수가 가격에 미치는 영향을 추가 분석 후 결정.
+특별히 오래된 차량:
+올드카에 대한 별도 처리 방안을 고려.
+예약 차량의 실제 가격 산정 방법:
+시장 데이터를 활용한 추정치 도입 가능성 검토.
