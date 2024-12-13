@@ -31,7 +31,7 @@ tuning_history - 쓰레기 컬럼!!!! - 개인적으로는 없음 이나 적법 
 
 special_history - 좋은 컬럼 - 없음 , 또는 있음 = 침수 가 전부 0아님 1로 표현해도 될듯
 
-usage_change - 쓰레기 컬럼 - tuning_history와 똑같음 
+usage_change - 안좋은 컬럼 - tuning_history와 똑같음 
 
 accident - 좋은 컬럼
 
