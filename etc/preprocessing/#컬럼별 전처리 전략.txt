@@ -1,0 +1,58 @@
+#강건희 60192328 코드2 -전처리 코드 모음
+
+#특정 컬럼으로 보기
+select_df=df.select("demaged_count", "tuning_history")
+select_df.show()
+
+# 특정 id 값으로 필터링
+filtered_rows = status.filter(status["price"] == 9999)
+
+filtered_rows = df.filter(df["id"] == 37406612)
+filtered_rows = filtered_rows.select("transmission", "mileage")
+filtered_rows.show()
+
+filtered_rows = filtered_rows.select("transmission", "model","registration_date")
+filtered_rows = filtered_rows.select("").distinct()
+# 필터링된 데이터 출력
+filtered_rows.show(truncate=False)
+
+# df 컬럼의 고유 값 추출
+unique_values = df.select("total_loss").distinct()
+unique_values.show(truncate=False)
+
+#history 컬럼의 고유 값 추출
+unique_values = historys.select("co_price").distinct()
+unique_values.show(truncate=False)
+
+##status 전처리 정리
+transmission - "-"를 오토로 바꾸자 (신경 써야 될 부분 어쩌면 모델명에 따라 바꾸기도 가능)
+warranty - 좋은 컬럼 - 자가 보증 , 보험사 보증 2개 밖에 없음
+tuning_history - 쓰레기 컬럼!!!! - 개인적으로는 없음 이나 적법 불법에 따라 순서를 매기는 것도...
+
+special_history - 좋은 컬럼 - 없음 , 또는 있음 = 침수 가 전부 0아님 1로 표현해도 될듯
+
+usage_change - 안좋은 컬럼 - tuning_history와 똑같음 
+
+accident - 좋은 컬럼
+
+little_accident - 좋은 컬럼
+
+
+##history 전처리 정리
+안 좋은 애들 - nc ,oc , cm_num, co_nums
+좋은 애들 tl , fd ,tf
+
+# 'little_accident' 컬럼 삭제
+df = df.drop("license_changed")
+
+
+-----------------------------------------------------------------------
+# "긍정적" 값(없음)은 0, "부정적" 값(있음)은 1로 수동 매핑
+from pyspark.sql.functions import when
+df = df.withColumn("tuning_history", when(df.tuning_history == "없음", 0).otherwise(1))
+
+########one-hot 인코딩
+from pyspark.ml.feature import StringIndexer, OneHotEncoder
+indexer = StringIndexer(inputCol="warranty", outputCol="warranty")
+
+status= indexer.fit(status).transform(status)
