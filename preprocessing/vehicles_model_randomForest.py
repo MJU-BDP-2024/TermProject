@@ -3,6 +3,12 @@
 #export PYTHONIOENCODING=utf8
 from pyspark.sql import SparkSession
 
+# SparkSession 생성
+spark = SparkSession.builder \
+    .appName("VehiclesModel") \
+    .getOrCreate()
+
+
 historys = spark.read.csv("vehicles_history.csv", header="true",sep=",", inferSchema="true")
 
 prices = spark.read.csv("vehicles_price.csv", header="true",sep=",", inferSchema="true")
